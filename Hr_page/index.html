@@ -1,0 +1,520 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Review</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            background-color: #ffffff;
+        }
+
+        header {
+            position: relative;
+            text-align: center;
+            height: 90px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #f8f9fa;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header p {
+            font-weight: 300;
+            font-size: 1.1rem;
+            margin-top: 15px;
+            max-width: 700px;
+            opacity: 0.9;
+            z-index: 2;
+        }
+
+        @keyframes moveCircles {
+            0% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-50%) translateX(-50%); }
+            100% { transform: translateY(0) translateX(0); }
+        }
+
+        .banner-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .circle {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: moveCircles 10s infinite linear;
+        }
+
+        .circle:nth-child(1) {
+            top: 10%;
+            left: 20%;
+            animation-duration: 8s;
+        }
+
+        .circle:nth-child(2) {
+            top: 50%;
+            left: 70%;
+            animation-duration: 12s;
+        }
+
+        .circle:nth-child(3) {
+            top: 80%;
+            left: 40%;
+            animation-duration: 15s;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            width: 95%;
+            margin-top: 20px;
+            gap: 30px;
+        }
+
+        .left-side {
+            width: 50%;
+            background: linear-gradient(rgba(224, 224, 255, 0.45), rgba(253, 240, 227, 0.61), rgba(247, 222, 255, 0.568));
+            padding: 20px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-side h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: none;
+            height: 120px;
+        }
+
+        button {
+            font-family: inherit;
+            display: inline-block;
+            width: 100%;
+            padding: 10px;
+            cursor: pointer;
+            border: 2px solid #560bad;
+            transition: 0.5s;
+            font-size: 17px;
+            border-radius: 6px;
+            font-weight: 500;
+            color: #560bad;
+            background-color: #fff;
+        }
+
+        button:hover {
+            color: #fff;
+            background-color: #560bad;
+        }
+
+        .right-side {
+            width: 50%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            height: 750px;
+            overflow-y: auto;
+            justify-content: flex-start;
+        }
+
+        .appraisal-card {
+            background-color: #f0e0ff57;
+            color: rgb(0, 0, 0);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgb(0, 0, 0, 0.1);
+            width: 80%;
+            min-height: 140px;
+            max-height: 140px;
+            display: block;
+            overflow: auto;
+            flex-wrap: wrap;
+            margin-left: auto;
+            margin-right: auto;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .appraisal-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media screen and (max-width: 575px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .left-side, .right-side {
+                width: 100%;
+                height: auto;
+                padding: 15px;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .no-data-message {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .no-data-img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .no-data-text h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .no-data-text p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="banner-background">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+        <h1>Employee Appraisal Form</h1>
+        <p>Submit your appraisal feedback below.</p>
+    </header>
+    <div class="container">
+        <div class="left-side">
+            <form id="appraisalForm">
+                <div class="form-group">
+                    <label for="empName">Employee Name:</label>
+                    <input type="text" id="empName" placeholder="Enter Employee Name" required minlength="3" maxlength="40">
+                    <span id="empName-error" class="error-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="empId">Employee ID:</label>
+                    <input type="text" id="empId" placeholder="Enter Employee ID" required minlength="7" maxlength="7">
+                    <span id="empId-error" class="error-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="taskName">Task Name:</label>
+                    <input type="text" id="taskName" placeholder="Enter Task Name" required minlength="3" maxlength="40">
+                    <span id="taskName-error" class="error-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="feedback">Feedback:</label>
+                    <textarea id="feedback" placeholder="Enter reason" required minlength="5" maxlength="80"></textarea>
+                    <span id="feedback-error" class="error-message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="rating">Rating:</label>
+                    <select id="rating" required>
+                        <option value="">Select Rating</option>
+                        <option value="1">⭐</option>
+                        <option value="2">⭐⭐</option>
+                        <option value="3">⭐⭐⭐</option>
+                        <option value="4">⭐⭐⭐⭐</option>
+                        <option value="5">⭐⭐⭐⭐⭐</option>
+                    </select>
+                    <span id="rating-error" class="error-message"></span>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <div class="right-side" id="cardsContainer"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            loadAppraisals();
+
+            document.getElementById("empName").addEventListener("input", validateEmpName);
+            document.getElementById("empId").addEventListener("input", validateEmpId);
+            document.getElementById("taskName").addEventListener("input", validateTaskName);
+            document.getElementById("feedback").addEventListener("input", validateFeedback);
+            document.getElementById("rating").addEventListener("change", validateRating);
+
+            document.getElementById("appraisalForm").addEventListener("submit", async function (e) {
+                e.preventDefault();
+
+                let empName = document.getElementById("empName").value.trim();
+                let empId = document.getElementById("empId").value.trim();
+                let taskName = document.getElementById("taskName").value.trim();
+                let feedback = document.getElementById("feedback").value.trim();
+                let rating = document.getElementById("rating").value;
+
+                if (
+                    !validateEmpName() ||
+                    !validateEmpId() ||
+                    !validateTaskName() ||
+                    !validateFeedback() ||
+                    !validateRating()
+                ) {
+                    return;
+                }
+
+                let appraisal = {
+                    empName,
+                    empId,
+                    taskName,
+                    feedback,
+                    rating: parseInt(rating)
+                };
+
+                try {
+                    const response = await fetch('http://localhost:3000/api/appraisals', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(appraisal),
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.error || `Failed to save appraisal (Status: ${response.status})`);
+                    }
+
+                    await displayAppraisals();
+                    document.getElementById("appraisalForm").reset();
+                    alert('Appraisal submitted successfully!');
+                } catch (err) {
+                    console.error('Submission Error:', err);
+                    alert(`Error saving appraisal: ${err.message}`);
+                }
+            });
+
+            function validateEmpName() {
+                let empName = document.getElementById("empName").value;
+                let error = document.getElementById("empName-error");
+
+                if (empName.startsWith(" ") || empName.endsWith(" ")) {
+                    error.innerText = "Employee Name cannot have leading or trailing spaces.";
+                    error.style.display = "inline";
+                    return false;
+                }
+
+                let pattern = /^(?!.*\.\.)(?!.* \.)(?!.*\. )(?!^\.)[A-Za-z.]+(?:\s[A-Za-z.]+)*$/;
+                let dotCount = (empName.match(/\./g) || []).length;
+
+                if (!pattern.test(empName) || dotCount > 2) {
+                    error.innerText = "Invalid Employee Name format.";
+                    error.style.display = "inline";
+                    return false;
+                }
+
+                error.style.display = "none";
+                return true;
+            }
+
+            function validateEmpId() {
+                let empId = document.getElementById("empId").value;
+                let error = document.getElementById("empId-error");
+
+                if (empId.startsWith(" ") || empId.endsWith(" ")) {
+                    error.innerText = "Employee ID cannot have leading or trailing spaces.";
+                    error.style.display = "inline";
+                    return false;
+                }
+
+                let pattern = /^[A-Z]{3}0\d{3}$/;
+                if (!pattern.test(empId)) {
+                    error.innerText = "Employee ID should be in format: ABC0123.";
+                    error.style.display = "inline";
+                    return false;
+                }
+
+                error.style.display = "none";
+                return true;
+            }
+
+            function validateTaskName() {
+                let taskName = document.getElementById("taskName").value;
+                let error = document.getElementById("taskName-error");
+
+                if (taskName.startsWith(" ") || taskName.endsWith(" ")) {
+                    error.innerText = "Task Name cannot have leading or trailing spaces.";
+                    error.style.display = "inline";
+                    return false;
+                }
+
+                let pattern = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+                if (!pattern.test(taskName)) {
+                    error.innerText = "Task Name should only contain alphabets and single spaces.";
+                    error.style.display = "inline";
+                    return false;
+                }
+
+                error.style.display = "none";
+                return true;
+            }
+
+            function validateFeedback() {
+                let feedback = document.getElementById("feedback").value;
+                let error = document.getElementById("feedback-error");
+
+                if (feedback.startsWith(" ") || feedback.endsWith(" ")) {
+                    error.innerText = "Feedback cannot have leading or trailing spaces.";
+                    error.style.display = "inline";
+                    return false;
+                }
+
+                let pattern = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+                if (!pattern.test(feedback)) {
+                    error.innerText = "Feedback should only contain alphabets and single spaces.";
+                    error.style.display = "inline";
+                    return false;
+                }
+
+                error.style.display = "none";
+                return true;
+            }
+
+            function validateRating() {
+                let rating = document.getElementById("rating").value;
+                let error = document.getElementById("rating-error");
+
+                if (!rating) {
+                    error.innerText = "Please select a rating.";
+                    error.style.display = "inline";
+                    return false;
+                }
+
+                error.style.display = "none";
+                return true;
+            }
+
+            async function loadAppraisals() {
+                await displayAppraisals();
+            }
+
+            async function displayAppraisals() {
+                let container = document.getElementById("cardsContainer");
+                container.innerHTML = "";
+
+                try {
+                    const response = await fetch('http://localhost:3000/api/appraisals');
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.error || `Failed to fetch appraisals (Status: ${response.status})`);
+                    }
+                    const appraisals = await response.json();
+
+                    if (appraisals.length === 0) {
+                        let noDataDiv = document.createElement("div");
+                        noDataDiv.classList.add("no-data-message");
+
+                        let noDataImage = document.createElement("img");
+                        noDataImage.src = "https://cdn-icons-png.flaticon.com/512/4076/4076478.png";
+                        noDataImage.alt = "No Appraisals";
+                        noDataImage.classList.add("no-data-img");
+
+                        let noDataText = document.createElement("div");
+                        noDataText.classList.add("no-data-text");
+                        noDataText.innerHTML = `
+                            <h3>No Appraisals Given</h3>
+                            <p>You don't have given any performance appraisals yet. Submit the form for new appraisal.</p>
+                        `;
+
+                        noDataDiv.appendChild(noDataImage);
+                        noDataDiv.appendChild(noDataText);
+                        container.appendChild(noDataDiv);
+                    } else {
+                        appraisals.forEach((appraisal) => {
+                            let card = document.createElement("div");
+                            card.classList.add("appraisal-card");
+                            card.innerHTML = `
+                                <strong>Employee Name:</strong> ${appraisal.emp_name} <br>
+                                <strong>Employee ID:</strong> ${appraisal.emp_id} <br>
+                                <strong>Task Name:</strong> ${appraisal.task_name} <br>
+                                <strong>Feedback:</strong> ${appraisal.feedback} <br>
+                                <strong>Rating:</strong> <span class="stars">${"⭐".repeat(appraisal.rating)}</span>
+                            `;
+                            container.appendChild(card);
+                        });
+                    }
+                } catch (err) {
+                    console.error('Fetch Error:', err);
+                    container.innerHTML = `<p>Error loading appraisals: ${err.message}. Please check the server logs for more details.</p>`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
