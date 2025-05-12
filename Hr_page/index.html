@@ -338,7 +338,7 @@
                 };
 
                 try {
-                    const response = await fetch('http://localhost:3000/api/appraisals', {
+                    const response = await fetch('http://localhost:3001/api/appraisals', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -469,7 +469,7 @@
                 container.innerHTML = "";
 
                 try {
-                    const response = await fetch('http://localhost:3000/api/appraisals');
+                    const response = await fetch('http://localhost:3001/api/appraisals');
                     if (!response.ok) {
                         const errorData = await response.json().catch(() => ({}));
                         throw new Error(errorData.error || `Failed to fetch appraisals (Status: ${response.status})`);
