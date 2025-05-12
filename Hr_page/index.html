@@ -393,7 +393,7 @@
                     return false;
                 }
 
-                let pattern = /^[A-Z]{3}0\d{3}$/;
+                let pattern = /^[ATS]{3}0\d{3}$/;
                 if (!pattern.test(empId)) {
                     error.innerText = "Employee ID should be in format: ABC0123.";
                     error.style.display = "inline";
