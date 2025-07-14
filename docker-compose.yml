@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: ajay30_postgres
+    ports:
+      - "5512:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: new_employee_db
+    volumes:
+      - pgdata30:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql 
+    networks:
+      - appraisal-net
+
+  backend:
+    build: ./backend
+    container_name: ajay30_backend
+    ports:
+      - "3085:3085"
+    depends_on:
+      - postgres
+    environment:
+      - DB_USER=postgres
+      - DB_PASSWORD=admin123
+      - DB_NAME=new_employee_db
+      - DB_PORT=5432
+      - DB_HOST=postgres
+    networks:
+      - appraisal-net
+
+  frontend:
+    build: ./frontend
+    container_name: ajay30_frontend
+    ports:
+      - "8297:80"
+    depends_on:
+      - backend
+    networks:
+      - appraisal-net
+
+  hr_page:
+    build: ./Hr_page
+    container_name: ajay30_hr_page
+    ports:
+      - "8298:80"
+    depends_on:
+      - backend
+    networks:
+      - appraisal-net
+
+volumes:
+  pgdata30:
+
+networks:
+  appraisal-net:
+
