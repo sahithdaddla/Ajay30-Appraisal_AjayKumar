@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appraisal Dashboard</title>
+    <title>Employee Appraisal Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-
-
         * {
             margin: 0;
             padding: 0;
@@ -101,17 +99,85 @@
             animation-duration: 15s;
         }
 
-        .appraisal-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
+        .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 10px;
         }
 
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            max-width: 1400px;
+            align-items: flex-start;
+        }
+
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-container input {
+            padding: 10px 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            flex: 1;
+            transition: border 0.3s;
+        }
+
+        .search-container input:focus {
+            outline: none;
+            border-color: #6a11cb;
+            box-shadow: 0 0 0 2px rgba(106, 17, 203, 0.1);
+        }
+
+        .search-container button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            background-color: #6a11cb;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-container button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .search-container button:hover:not(:disabled) {
+            background-color: #4a0dab;
+        }
+
+        .error-message {
+            color: #d62828;
+            font-size: 0.875rem;
+            display: none;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .appraisal-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
         .appraisal-card {
-            background: linear-gradient(rgba(242, 242, 255, 0.833),white);
+            background: linear-gradient(rgba(242, 242, 255, 0.833), white);
             border-radius: 16px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 25px;
@@ -152,6 +218,10 @@
             font-weight: 600;
             color: #212529;
             margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
         }
 
         .card-subtitle {
@@ -213,21 +283,12 @@
             font-weight: 600;
             font-size: 0.8rem;
             text-transform: uppercase;
+            cursor: pointer;
         }
 
         .status.completed {
             background-color: rgba(76, 175, 80, 0.1);
             color: #4CAF50;
-        }
-
-        .status.pending {
-            background-color: rgba(255, 193, 7, 0.1);
-            color: #FFC107;
-        }
-
-        .status.overdue {
-            background-color: rgba(244, 67, 54, 0.1);
-            color: #F44336;
         }
 
         .no-data {
@@ -260,10 +321,81 @@
             max-width: 500px;
         }
 
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #495057;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #F44336;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .modal-subtitle {
+            font-size: 0.9rem;
+            color: #495057;
+            opacity: 0.7;
+        }
+
+       
+
+        @media (max-width: 1024px) {
+            .container {
+                max-width: 800px;
+            }
+
+            .appraisal-container {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
         @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
             header {
                 height: auto;
-                padding: 30px 20px;
+                padding: 20px;
             }
 
             header h1 {
@@ -271,19 +403,33 @@
             }
 
             header p {
-                font-size: 1rem;
+                font-size: 0.9rem;
             }
 
             .appraisal-container {
                 grid-template-columns: 1fr;
             }
+
+            .circle {
+                width: 150px;
+                height: 150px;
+            }
+
+            .search-container {
+                align-items: stretch;
+            }
+
+            .search-input-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-container input {
+                margin-bottom: 10px;
+            }
         }
 
         @media (max-width: 480px) {
-            body {
-                padding: 15px;
-            }
-
             .appraisal-card {
                 padding: 20px;
             }
@@ -296,6 +442,68 @@
 
             .card-title {
                 font-size: 1.2rem;
+                max-width: 150px;
+            }
+
+            .rating {
+                font-size: 1rem;
+            }
+
+            .stars {
+                font-size: 0.9rem;
+            }
+
+            .feedback {
+                font-size: 0.9rem;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            header p {
+                font-size: 0.8rem;
+            }
+
+            .search-container input {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+
+            .search-container button {
+                font-size: 0.9rem;
+                padding: 8px 16px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            body {
+                padding: 10px;
+            }
+
+            .appraisal-card {
+                padding: 15px;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+                max-width: 120px;
+            }
+
+            .feedback {
+                font-size: 0.85rem;
+            }
+
+            .card-footer {
+                font-size: 0.8rem;
+            }
+
+            .search-container input {
+                font-size: 0.8rem;
+            }
+
+            .search-container button {
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -307,73 +515,186 @@
             <div class="circle"></div>
             <div class="circle"></div>
         </div>
-        <h1>Performance Appraisals</h1>
-        <p>Review your performance evaluations, feedback from managers, and track your professional growth journey</p>
+        <h1>Employee Appraisal Dashboard</h1>
+        <p>Enter your Employee ID to view your performance appraisals and feedback</p>
     </header>
 
-    <div class="appraisal-container" id="appraisal-container"></div>
+    <div class="container">
+        <div class="search-container">
+            <div class="search-input-wrapper">
+                <input type="text" id="searchEmpId" placeholder="Enter Your Employee ID (e.g., ATS0001)" pattern="^ATS0(?!000)[0-9]{3}$">
+                <button id="searchBtn" disabled><i class="fas fa-search"></i> Search</button>
+            </div>
+            <span id="searchEmpId-error" class="error-message"></span>
+        </div>
+        <div class="appraisal-container" id="appraisal-container">
+            <div class="no-data">
+                <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="No appraisals" class="no-data-img">
+                <h3>No Appraisals Found</h3>
+                <p>Please enter your Employee ID (e.g., ATS0001) to view your performance appraisals.</p>
+            </div>
+        </div>
+    </div>
 
+    <div class="modal" id="appraisalModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">×</span>
+            <div class="modal-header">
+                <div class="modal-title" id="modalEmpName"></div>
+                <div class="modal-subtitle" id="modalEmpId"></div>
+            </div>
+            <div class="rating-container">
+                <div class="rating" id="modalRating"></div>
+                <div class="stars" id="modalStars"></div>
+            </div>
+            <div class="feedback">
+                <div class="feedback-item">
+                    <span class="feedback-label">Task:</span>
+                    <span id="modalTask"></span>
+                </div>
+                <div class="feedback-item">
+                    <span class="feedback-label">Feedback:</span>
+                    <span id="modalFeedback"></span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <span id="modalDate"></span>
+            </d
+iv>
+        </div>
+    </div>
+    
     <script>
-        async function displayAppraisals() {
-            const container = document.getElementById('appraisal-container');
-            container.innerHTML = '';
+        const BASE_URL = 'http://13.49.49.147:3085'; // For production
+        // const BASE_URL = 'http://localhost:3085'; // For local testing
 
-            try {
-                const response = await fetch('http://16.170.245.69:3085/api/appraisals');
-                const appraisals = await response.json();
+        let appraisalsData = [];
 
-                if (appraisals.length === 0) {
-                    container.innerHTML = `
-                        <div class="no-data">
-                            <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="No appraisals" class="no-data-img">
-                            <h3>No Appraisals Found</h3>
-                            <p>You don't have any performance appraisals yet. Check back later or contact your manager.</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                appraisals.forEach(appraisal => {
-                    const card = document.createElement('div');
-                    card.classList.add('appraisal-card');
-                    card.innerHTML = `
-                        <div class="card-header">
-                            <div class="card-icon"><i class="fas fa-user"></i></div>
-                            <div>
-                                <div class="card-title">${appraisal.emp_name}</div>
-                                <div class="card-subtitle">ID: ${appraisal.emp_id}</div>
-                            </div>
-                        </div>
-                        <div class="rating-container">
-                            <div class="rating">${appraisal.rating}/5</div>
-                            <div class="stars">${'⭐'.repeat(appraisal.rating)}</div>
-                        </div>
-                        <div class="feedback">
-                            <div class="feedback-item">
-                                <span class="feedback-label">Task:</span>
-                                <span>${appraisal.task_name}</span>
-                            </div>
-                            <div class="feedback-item">
-                                <span class="feedback-label">Feedback:</span>
-                                <span>${appraisal.feedback}</span>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <span>Date: ${new Date(appraisal.created_at).toLocaleDateString()}</span>
-                            <span class="status completed">HR</span>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-            } catch (err) {
-                console.error(err);
-                container.innerHTML = '<p>Error loading appraisals</p>';
-            }
+        // Define modal functions in the global scope
+        function showModal(index) {
+            const appraisal = appraisalsData[index];
+            const modal = document.getElementById('appraisalModal');
+            document.getElementById('modalEmpName').textContent = appraisal.emp_name;
+            document.getElementById('modalEmpId').textContent = `ID: ${appraisal.emp_id}`;
+            document.getElementById('modalRating').textContent = `${appraisal.rating}/5`;
+            document.getElementById('modalStars').textContent = '⭐'.repeat(appraisal.rating);
+            document.getElementById('modalTask').textContent = appraisal.task_name;
+            document.getElementById('modalFeedback').textContent = appraisal.feedback;
+            document.getElementById('modalDate').textContent = `Date: ${new Date(appraisal.created_at).toLocaleDateString()}`;
+            modal.style.display = 'flex';
         }
 
-        window.onload = function() {
-            displayAppraisals();
-        };
+        function closeModal() {
+            document.getElementById('appraisalModal').style.display = 'none';
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchEmpId = document.getElementById("searchEmpId");
+            const searchBtn = document.getElementById("searchBtn");
+
+            // Close modal when clicking outside content
+            window.onclick = function(event) {
+                const modal = document.getElementById('appraisalModal');
+                if (event.target === modal) {
+                    closeModal();
+                }
+            }
+
+            searchEmpId.addEventListener("input", validateSearchEmpId);
+            searchBtn.addEventListener("click", () => {
+                const empId = searchEmpId.value.trim();
+                if (/^ATS0(?!000)[0-9]{3}$/.test(empId)) {
+                    fetchAppraisalsByEmpId(empId);
+                }
+            });
+
+            function validateSearchEmpId() {
+                let empId = searchEmpId.value.trim();
+                let error = document.getElementById("searchEmpId-error");
+
+                if (empId.startsWith(" ") || empId.endsWith(" ")) {
+                    error.innerText = "Employee ID cannot have leading or trailing spaces.";
+                    error.style.display = "block";
+                    searchBtn.disabled = true;
+                    return false;
+                }
+
+                let pattern = /^ATS0(?!000)[0-9]{3}$/;
+                if (!pattern.test(empId)) {
+                    error.innerText = "Employee ID must be ATS0xxx (e.g., ATS0001 to ATS0999).";
+                    error.style.display = "block";
+                    searchBtn.disabled = true;
+                    return false;
+                }
+
+                error.style.display = "none";
+                searchBtn.disabled = false;
+                return true;
+            }
+
+            async function fetchAppraisalsByEmpId(empId) {
+                const container = document.getElementById('appraisal-container');
+                container.innerHTML = '';
+
+                try {
+                    const response = await fetch(`${BASE_URL}/api/appraisals/${empId}`);
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.error || `Failed to fetch appraisals (Status: ${response.status})`);
+                    }
+                    appraisalsData = await response.json();
+
+                    if (appraisalsData.length === 0) {
+                        container.innerHTML = `
+                            <div class="no-data">
+                                <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="No appraisals" class="no-data-img">
+                                <h3>No Appraisals Found</h3>
+                                <p>No appraisals found for your Employee ID ${empId}. Contact HR for details.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    appraisalsData.forEach((appraisal, index) => {
+                        const card = document.createElement('div');
+                        card.classList.add('appraisal-card');
+                        card.innerHTML = `
+                            <div class="card-header">
+                                <div class="card-icon"><i class="fas fa-user"></i></div>
+                                <div>
+                                    <div class="card-title">${appraisal.emp_name}</div>
+                                    <div class="card-subtitle">ID: ${appraisal.emp_id}</div>
+                                </div>
+                            </div>
+                            <div class="rating-container">
+                                <div class="rating">${appraisal.rating}/5</div>
+                                <div class="stars">${'⭐'.repeat(appraisal.rating)}</div>
+                            </div>
+                            <div class="feedback">
+                                <div class="feedback-item">
+                                    <span class="feedback-label">Task:</span>
+                                    <span>${appraisal.task_name}</span>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <span>Date: ${new Date(appraisal.created_at).toLocaleDateString()}</span>
+                                <span class="status completed" onclick="showModal(${index})">View</span>
+                            </div>
+                        `;
+                        container.appendChild(card);
+                    });
+                } catch (err) {
+                    console.error('Fetch Error:', err);
+                    container.innerHTML = `
+                        <div class="no-data">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="Error" class="no-data-img">
+                            <h3>Error Loading Appraisals</h3>
+                            <p>${err.message}. Please check the server logs for more details.</p>
+                        </div>
+                    `;
+                }
+            }
+        });
     </script>
 </body>
-</html>  
+</html>
