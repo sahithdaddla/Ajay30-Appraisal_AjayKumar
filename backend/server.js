@@ -12,9 +12,9 @@ app.use(cors({
     origin: [
         process.env.FRONTEND_URL,
         'http://127.0.0.1:5500',
-        'http://51.20.32.194:8297',
-        'http://51.20.32.194:8298',
-        'http://51.20.32.194:3085',
+        'http://13.60.236.63:8297',
+        'http://13.60.236.63:8298',
+        'http://13.60.236.63:3085',
         'http://localhost:5500',
         'http://localhost:3085'
     ],
